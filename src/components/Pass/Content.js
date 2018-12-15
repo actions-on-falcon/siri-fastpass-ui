@@ -6,7 +6,7 @@ const Content = styled.div`
   width: 500px;
   font-size: 2em;
   text-align: center;
-
+  border-radius: 0.25em;
   box-shadow: 10px 10px 45px -10px rgba(0, 0, 0, 0.45);
 `
 

@@ -34,7 +34,12 @@ const Pass = () => {
         <Wrapper>
           <QRCode className="qr" value={code} />
         </Wrapper>
-        <Text>Visitor Pass</Text>
+        <Text paddingTop="0.75em" paddingBottom="0">
+          {name}
+        </Text>
+        <Text paddingTop="0.75em" size="0.5em">
+          Visitor Pass
+        </Text>
       </Content>
     </Card>
   )

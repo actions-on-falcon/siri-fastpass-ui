@@ -4,8 +4,9 @@ import styled from 'styled-components'
 const Text = styled.div`
   color: #fff;
   width: 500px;
-  padding: 1em 0;
-  font-size: 1em;
+  padding: ${props => props.paddingTop || '1em'} 0
+    ${props => props.paddingBottom || '1em'} 0;
+  font-size: ${props => props.size || '1em'};
   text-align: center;
   font-family: 'Roboto', sans-serif;
 `
