@@ -11,6 +11,14 @@ const api = axios.create({
   baseURL: 'https://actions-on-falcon.herokuapp.com'
 })
 
+function getParams(name) {
+  if (typeof window === 'undefined') return
+
+  const qs = new URLSearchParams(window.location.search)
+
+  return qs.get(name)
+}
+
 const Pass = () => {
   const [pass, setPass] = useState({})
 
@@ -19,7 +27,7 @@ const Pass = () => {
   }, [])
 
   const getCode = async () => {
-    const id = 'nlbvdu'
+    const id = getParams('id')
     const {data: code} = await api.get(`/pass/${id}`)
     if (!code) return
 
