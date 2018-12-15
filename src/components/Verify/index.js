@@ -1,6 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react'
 import styled from 'styled-components'
-import {Cameras, Scanner} from 'react-instascan'
 import axios from 'axios'
 
 import Button from './Button'
@@ -82,6 +81,30 @@ const Meta = styled.div`
   font-size: 1em;
   font-weight: 300;
 `
+
+let Cameras = () => null
+let Scanner = () => null
+
+if (typeof window !== 'undefined') {
+  const Instascan = require('react-instascan')
+
+  Cameras = Instascan.Cameras
+  Scanner = Instascan.Scanner
+}
+
+function CodeScanner({onScan}) {
+  if (typeof window === 'undefined') return null
+
+  return (
+    <Cameras>
+      {cameras => (
+        <Scanner camera={cameras[0]} onScan={onScan}>
+          <Video />
+        </Scanner>
+      )}
+    </Cameras>
+  )
+}
 
 export default function Verify() {
   const [code, setCode] = useState('')
@@ -167,15 +190,7 @@ export default function Verify() {
         </ModalBackdrop>
       )}
 
-      {!isCodeModal && (
-        <Cameras>
-          {cameras => (
-            <Scanner camera={cameras[0]} onScan={onEnterCode}>
-              <Video />
-            </Scanner>
-          )}
-        </Cameras>
-      )}
+      {!isCodeModal && <CodeScanner onScan={onEnterCode} />}
 
       {isCodeModal && (
         <ModalBackdrop>
