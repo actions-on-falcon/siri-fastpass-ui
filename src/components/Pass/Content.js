@@ -1,0 +1,13 @@
+import React from 'react'
+import styled from 'styled-components'
+
+const Content = styled.div`
+  background-color: #2666d1;
+  width: 500px;
+  font-size: 2em;
+  text-align: center;
+
+  box-shadow: 10px 10px 45px -10px rgba(0, 0, 0, 0.45);
+`
+
+export default Content

@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: 'Siri Fast Pass',
+    title: 'Siri FastPass',
     description:
       'Kick off your next, great Gatsby project with this default starter. This barebones starter ships with the main Gatsby configuration files you might need.',
     author: '@gatsbyjs'
@@ -27,9 +27,10 @@ module.exports = {
         display: 'minimal-ui',
         icon: 'src/images/gatsby-icon.png' // This path is relative to the root of the site.
       }
-    }
+    },
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.app/offline
     // 'gatsby-plugin-offline',
+    `gatsby-plugin-styled-components`
   ]
 }
