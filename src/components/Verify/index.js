@@ -1,8 +1,14 @@
-import React, {useState, useEffect, useRef} from 'react'
+import React, {useState} from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 
 import Button from './Button'
+
+let QrReader = () => null
+
+if (typeof window !== 'undefined') {
+  QrReader = require('react-qr-scanner')
+}
 
 const api = axios.create({
   baseURL: 'https://actions-on-falcon.herokuapp.com'
@@ -82,30 +88,6 @@ const Meta = styled.div`
   font-weight: 300;
 `
 
-let Cameras = () => null
-let Scanner = () => null
-
-if (typeof window !== 'undefined') {
-  const Instascan = require('react-instascan')
-
-  Cameras = Instascan.Cameras
-  Scanner = Instascan.Scanner
-}
-
-function CodeScanner({onScan}) {
-  if (typeof window === 'undefined') return null
-
-  return (
-    <Cameras>
-      {cameras => (
-        <Scanner camera={cameras[0]} onScan={onScan}>
-          <Video />
-        </Scanner>
-      )}
-    </Cameras>
-  )
-}
-
 export default function Verify() {
   const [code, setCode] = useState('')
   const [pass, setPass] = useState({})
@@ -115,6 +97,8 @@ export default function Verify() {
   const [isCodeModal, setCodeModal] = useState(false)
 
   async function onEnterCode(code) {
+    if (!code) return
+
     setCodeModal(false)
 
     console.log('Passcode =', code)
@@ -190,7 +174,14 @@ export default function Verify() {
         </ModalBackdrop>
       )}
 
-      {!isCodeModal && <CodeScanner onScan={onEnterCode} />}
+      {!isCodeModal && (
+        <QrReader
+          style={{maxWidth: 800}}
+          delay={100}
+          onError={console.error}
+          onScan={onEnterCode}
+        />
+      )}
 
       {isCodeModal && (
         <ModalBackdrop>
