@@ -1,15 +1,15 @@
 import React from 'react'
 
 import SEO from '../components/seo'
-import Image from '../components/image'
 import Layout from '../components/layout'
-import Pass from '../components/Pass'
+import Verify from '../components/Verify'
 
-const VisitorPage = () => (
+const VerifyVisitorPage = () => (
   <Layout>
     <SEO title="Visitor Pass" keywords={['react']} />
-    <Pass />
+
+    <Verify />
   </Layout>
 )
 
-export default VisitorPage
+export default VerifyVisitorPage
