@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import {Cameras, Scanner} from 'react-instascan'
 import axios from 'axios'
 
+import Button from './Button'
+
 const api = axios.create({
   baseURL: 'https://actions-on-falcon.herokuapp.com'
 })
@@ -17,19 +19,6 @@ const Backdrop = styled.div`
 
   min-height: 100vh;
   background: linear-gradient(45deg, #4f00bc, #29abe2);
-`
-
-const Container = styled.div`
-  max-width: 1000px;
-
-  margin-top: 1.8em;
-  margin-bottom: 1.8em;
-
-  padding: 1.3em;
-  width: 100%;
-
-  background: white;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
 `
 
 const Video = styled.video`
@@ -65,32 +54,80 @@ const Heading = styled.h1`
   margin-top: 1em;
 `
 
+const Notice = styled.h1`
+  color: #2d2d30;
+  font-weight: 300;
+  font-size: 3.1em;
+  line-height: 1.3em;
+`
+
+const LargeButton = styled(Button)`
+  margin: 1.8em 0;
+  font-size: 1.3em;
+`
+
+const Input = styled.input`
+  width: 400px;
+  font-size: 4.1em;
+  border: none;
+  outline: none;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
+  padding: 0.5em;
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
+`
+
+const Meta = styled.div`
+  font-family: 'Roboto', sans-serif;
+  font-size: 1em;
+  font-weight: 300;
+`
+
 export default function Verify() {
-  const [qr, setQr] = useState(null)
+  const [code, setCode] = useState('')
   const [pass, setPass] = useState({})
   const [isLoading, setLoading] = useState(false)
+  const [isInvalid, setInvalid] = useState(false)
+  const [isActive, setActive] = useState(false)
+  const [isCodeModal, setCodeModal] = useState(false)
 
-  async function onScan(id) {
-    console.log('Pass ID =', id)
+  async function onEnterCode(code) {
+    setCodeModal(false)
 
-    setQr(id)
+    console.log('Passcode =', code)
+
+    setCode(code)
+    setActive(true)
 
     try {
       setLoading(true)
-      const {data: pass} = await api.get(`/pass/${id}`)
+      const {data: pass} = await api.get(`/pass/${code}`)
 
       console.log('Pass Info =', pass)
 
-      setPass(pass)
+      if (pass.code === 404 && pass.name === 'NotFound') {
+        setInvalid(true)
+        console.log('!! INVALID PASS:', code, pass)
+      } else {
+        setPass(pass)
+      }
     } catch (err) {
-      console.error('Pass Validation Error ->', err)
+      console.error('API Error ->', err)
     } finally {
       setLoading(false)
 
       setTimeout(() => {
-        setQr(null)
+        setCode('')
         setPass({})
+        setInvalid(false)
+        setActive(false)
       }, 5000)
+    }
+  }
+
+  function onKeyPress(event) {
+    if (event.key === 'Enter') {
+      onEnterCode(code)
     }
   }
 
@@ -98,33 +135,65 @@ export default function Verify() {
     <Backdrop>
       <Heading>Scan Your Visitor Pass</Heading>
 
-      {qr && (
+      {isActive && (
         <ModalBackdrop>
-          {isLoading && <h1>Verifying Access Pass... Please Wait.</h1>}
+          {isLoading && <Notice>Verifying Access Pass... Please Wait.</Notice>}
 
           {!isLoading && pass.name && (
             <div>
-              <h1>Welcome, {pass.name}! Have a great time.</h1>
+              <Notice>
+                <span>
+                  Welcome to 39, <strong>{pass.name}</strong>!
+                </span>
+
+                <br />
+
+                <span>Enjoy your visit.</span>
+              </Notice>
+
+              <Meta>Passcode: {pass.code}</Meta>
             </div>
+          )}
+
+          {!isLoading && isInvalid && (
+            <Notice>
+              <span>Your Access Pass is invalid.</span>
+
+              <br />
+
+              <span>Please contact the information counter.</span>
+            </Notice>
           )}
         </ModalBackdrop>
       )}
 
-      <Cameras>
-        {cameras => (
-          <div>
-            {console.log('Camera ->', cameras[0])}
-
-            <Scanner camera={cameras[0]} onScan={onScan}>
+      {!isCodeModal && (
+        <Cameras>
+          {cameras => (
+            <Scanner camera={cameras[0]} onScan={onEnterCode}>
               <Video />
             </Scanner>
-          </div>
-        )}
-      </Cameras>
+          )}
+        </Cameras>
+      )}
 
-      <Container>
-        <h1>...</h1>
-      </Container>
+      {isCodeModal && (
+        <ModalBackdrop>
+          <Input
+            value={code}
+            onKeyPress={onKeyPress}
+            onChange={e => setCode(e.target.value)}
+          />
+
+          <LargeButton onClick={() => onEnterCode(code)} success>
+            Enter Passcode
+          </LargeButton>
+        </ModalBackdrop>
+      )}
+
+      <LargeButton onClick={() => setCodeModal(true)} primary>
+        Enter Passcode
+      </LargeButton>
     </Backdrop>
   )
 }
