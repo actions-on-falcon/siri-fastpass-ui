@@ -16,7 +16,7 @@ const Pass = () => {
 
   useEffect(() => {
     getCode()
-  })
+  }, [])
 
   const getCode = async () => {
     const id = 'nlbvdu'
