@@ -117,6 +117,9 @@ export default function Verify() {
         console.log('!! INVALID PASS:', code, pass)
       } else {
         setPass(pass)
+
+        const response = await api.post('/notify', pass)
+        console.log('|> Notified Host of Visitor', response)
       }
     } catch (err) {
       console.error('API Error ->', err)
