@@ -174,7 +174,7 @@ export default function Verify() {
         </ModalBackdrop>
       )}
 
-      {!isCodeModal && (
+      {!isActive && !isCodeModal && (
         <QrReader
           style={{maxWidth: 800}}
           delay={100}
