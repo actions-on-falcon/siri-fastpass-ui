@@ -44,6 +44,10 @@ function SEO({description, lang, meta, keywords, title}) {
             name: 'twitter:description',
             content: metaDescription
           },
+          {
+            name: 'viewport',
+            content: 'width=device-width, initial-scale=1.0'
+          },
           keywords.length > 0 && {
             name: 'keywords',
             content: keywords.join(', ')

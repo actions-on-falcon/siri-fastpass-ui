@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 import QRCode from 'qrcode.react'
+import styled from 'styled-components'
 
-import Card from './Card'
 import Content from './Content'
 import Text from './Text'
 import Wrapper from './Wrapper'
@@ -18,6 +18,18 @@ function getParams(name) {
 
   return qs.get(name)
 }
+
+const Backdrop = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #4f00bc, #29abe2);
+`
 
 const Pass = () => {
   const [pass, setPass] = useState({})
@@ -37,7 +49,7 @@ const Pass = () => {
   const {name = '', code = '', time = '', phone = ''} = pass
 
   return (
-    <Card>
+    <Backdrop>
       <Content>
         <Wrapper>
           <QRCode className="qr" value={code} />
@@ -53,7 +65,7 @@ const Pass = () => {
           {code && <small>&nbsp;(code: {code})</small>}
         </Text>
       </Content>
-    </Card>
+    </Backdrop>
   )
 }
 
