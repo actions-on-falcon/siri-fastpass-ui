@@ -16,6 +16,7 @@ const Backdrop = styled.div`
   position: relative;
 
   min-height: 100vh;
+  background: linear-gradient(to bottom right, #4f00bc, #29abe2);
 `
 
 const Pass = () => {

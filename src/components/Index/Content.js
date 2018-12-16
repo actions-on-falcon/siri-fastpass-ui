@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 
 const Content = styled.div`
-  background-color: #2666d1;
   width: 500px;
   font-size: 2em;
   text-align: center;
